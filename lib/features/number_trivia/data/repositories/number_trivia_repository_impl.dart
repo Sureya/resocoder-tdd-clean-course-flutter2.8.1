@@ -1,6 +1,6 @@
 import 'package:bloc_course/core/errors/exceptions.dart';
 import 'package:bloc_course/core/errors/failure.dart';
-import 'package:bloc_course/core/platform/network_info.dart';
+import 'package:bloc_course/core/network/network_info.dart';
 import 'package:bloc_course/features/number_trivia/data/datasources/number_trivia_local_datasource.dart';
 import 'package:bloc_course/features/number_trivia/data/datasources/number_trivia_remote_datasource.dart';
 import 'package:bloc_course/features/number_trivia/domain/entities/number_trivia.dart';

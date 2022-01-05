@@ -7,6 +7,10 @@ import 'package:bloc_course/features/number_trivia/domain/entities/number_trivia
 import 'package:bloc_course/features/number_trivia/domain/repositories/number_trivia_repository.dart';
 import 'package:dartz/dartz.dart';
 
+
+typedef  Future<NumberTrivia> _ConcreteOrRandomChooser() ;
+
+
 class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
   NetworkInfo networkInfo;
 
@@ -34,7 +38,7 @@ class NumberTriviaRepositoryImpl implements NumberTriviaRepository {
   }
 
   Future<Either<Failure, NumberTrivia>> _getTrivia(
-      Future<NumberTrivia> Function() getConcreteOrRandom) async {
+      _ConcreteOrRandomChooser getConcreteOrRandom) async {
     if (await networkInfo.isConnected) {
       try {
         final NumberTrivia remoteTrivia = await getConcreteOrRandom();

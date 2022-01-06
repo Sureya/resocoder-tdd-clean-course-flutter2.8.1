@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:bloc_course/core/errors/exceptions.dart';
 import 'package:bloc_course/features/number_trivia/data/models/number_trivia_model.dart';
-import 'package:bloc_course/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 

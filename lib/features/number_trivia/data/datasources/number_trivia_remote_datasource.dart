@@ -1,13 +1,13 @@
-import 'package:bloc_course/features/number_trivia/domain/entities/number_trivia.dart';
+import 'package:bloc_course/features/number_trivia/data/models/number_trivia_model.dart';
 
 abstract class NumberTriviaRemoteDataSource {
   /// Calls the number endpoint
   ///
   /// Throws a [ServerException] for all error codes
-  Future<NumberTrivia> getConcreteNumberTrivia(int number);
+  Future<NumberTriviaModel> getConcreteNumberTrivia(int number);
 
   /// Calls the random endpoint
   ///
   /// Throws a [ServerException] for all error codes
-  Future<NumberTrivia> getRandomNumberTrivia();
+  Future<NumberTriviaModel> getRandomNumberTrivia();
 }

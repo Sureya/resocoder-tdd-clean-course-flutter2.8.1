@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:bloc_course/core/errors/exceptions.dart';
 import 'package:bloc_course/features/number_trivia/data/datasources/number_trivia_local_datasource.dart';

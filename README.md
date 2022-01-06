@@ -1,16 +1,23 @@
-# bloc_course
+# Introduction
 
-Bloc end to end
+This repo is implementation of `Learn Flutter Clean Architecture & TDD - Full Course (Flutter Tutorial)` course from [youtube](https://www.youtube.com/watch?v=dc3B_mMrZ-Q&t=13996s)
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Why is this repository required ?
 
-A few resources to get you started if this is your first Flutter project:
+While the structure of the course is exactly the same, the original course was created a 
+while ago, and some parts of it is bit outdated. The things that are different in this repository are
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Written in Flutter 2.8.1, Hence with `Null Safety`
+- Uses `internet_connection_checker: ^0.0.1+3` to check for internet connection
+- Uses `mocktail: ^0.2.0` for testing
+- Uses `dio: ^4.0.4` for HTTP calls
+- Uses `riverpod: ^1.0.3` for state management.
+
+
+
+#### Disclaimer
+All the credits for the contents of the repo goes to the Reso Coder, this repository just aims to 
+keep the best flutter course available up-to-date with latest packages.
+

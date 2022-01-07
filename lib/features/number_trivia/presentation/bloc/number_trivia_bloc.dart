@@ -26,17 +26,23 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
   }) : super(Empty()) {
     on<NumberTriviaEvent>((event, emit) => concreteLogic(event:event, emit:emit));
   }
+
   void concreteLogic({required event, required emit}){
     final inputEither = inputConverter.stringToUnsignedInt(
         str: event.numberString
     );
-
     inputEither.fold(
-            (failure) {
+        (failure) {
           emit(Error(message: INVALID_INPUT_FAILURE_MESSAGE)) ;
         },
-            (integer) {
-          throw UnimplementedError() ;
+        (integer) async {
+          emit(Loading());
+          final Params params = Params(number: integer) ;
+          final triviaResult = await getConcreteNumberTrivia(params: params);
+          triviaResult.fold(
+                  (failure) => emit(Error(message: "Failed to load")),
+                  (trivia) => emit(Loaded(trivia: trivia))
+          );
         }
     );
   }

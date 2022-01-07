@@ -17,7 +17,7 @@ void main() {
   setUp((){
     TestWidgetsFlutterBinding.ensureInitialized();
     mockNumberTriviaRepository = MockNumberTriviaRepository();
-    usecase = GetConcreteNumberTrivia(mockNumberTriviaRepository);
+    usecase = GetConcreteNumberTrivia(repository: mockNumberTriviaRepository);
   });
 
   final testNumber = 1 ;

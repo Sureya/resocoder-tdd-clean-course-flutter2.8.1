@@ -12,6 +12,7 @@ while ago, and some parts of it is bit outdated. The things that are different i
 - Written in Flutter 2.8.1, Hence with `Null Safety`
 - Uses `internet_connection_checker: ^0.0.1+3` to check for internet connection
 - Uses `mocktail: ^0.2.0` for testing
+- Uses `bloc_test: ^9.0.2` for testing blocs
 - Uses `dio: ^4.0.4` for HTTP calls
 - Uses `riverpod: ^1.0.3` for state management.
 

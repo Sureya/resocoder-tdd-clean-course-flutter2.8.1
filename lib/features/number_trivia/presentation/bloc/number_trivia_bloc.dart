@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:bloc_course/core/errors/exceptions.dart';
+import 'package:bloc_course/core/errors/failure.dart';
 import 'package:bloc_course/core/util/input_conversion.dart';
 import 'package:bloc_course/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:bloc_course/features/number_trivia/domain/usecases/get_concrete_number_trivia.dart';
@@ -40,7 +42,10 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
           final Params params = Params(number: integer) ;
           final triviaResult = await getConcreteNumberTrivia(params: params);
           triviaResult.fold(
-                  (failure) => emit(Error(message: "Failed to load")),
+                  (failure) {
+                    var msg = failure is ServerException ? CACHE_FAILURE_MESSAGE : SERVER_FAILURE_MESSAGE ;
+                    emit(Error(message: msg)) ;
+                  },
                   (trivia) => emit(Loaded(trivia: trivia))
           );
         }

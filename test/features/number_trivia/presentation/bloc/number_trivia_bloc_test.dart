@@ -1,3 +1,4 @@
+import 'package:bloc_course/core/errors/failure.dart';
 import 'package:bloc_course/core/util/input_conversion.dart';
 import 'package:bloc_course/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:bloc_course/features/number_trivia/domain/usecases/get_concrete_number_trivia.dart';
@@ -48,6 +49,15 @@ void main() {
       when(() => mockInputConverter.stringToUnsignedInt(str: any(named: 'str')))
           .thenReturn(Right(tNumberParsed));
     }
+
+    void setupServerFailureForConcreteNumber() {
+      when(() => mockInputConverter.stringToUnsignedInt(str: any(named: 'str')))
+          .thenReturn(Right(tNumberParsed));
+
+      when(() => mockConcreteNumberTrivia.call(params: any(named: 'params')))
+          .thenAnswer((_) async => Left(ServerFailure()));
+
+    }
     test(
         'should call InputConverter to validate and convert the string to an '
         'unsigned int', () async {
@@ -73,6 +83,32 @@ void main() {
           bloc.add(GetTriviaForConcreteNumber(numberString: tNumberString)),
       expect: () =>
           <NumberTriviaState>[Error(message: INVALID_INPUT_FAILURE_MESSAGE)],
+    );
+
+    blocTest<NumberTriviaBloc, NumberTriviaState>(
+      'should emit [ServerFailure] when the Server Exception is raised',
+      setUp: () => setupServerFailureForConcreteNumber(),
+      build: () => bloc,
+      act: (bloc) =>
+          bloc.add(GetTriviaForConcreteNumber(numberString: tNumberString)),
+      expect: () =>
+      <NumberTriviaState>[
+        Loading(),
+        Error(message: SERVER_FAILURE_MESSAGE)
+      ],
+    );
+
+    blocTest<NumberTriviaBloc, NumberTriviaState>(
+      'should emit [CacheFailure] when the Server Exception is raised',
+      setUp: () => setupServerFailureForConcreteNumber(),
+      build: () => bloc,
+      act: (bloc) =>
+          bloc.add(GetTriviaForConcreteNumber(numberString: tNumberString)),
+      expect: () =>
+      <NumberTriviaState>[
+        Loading(),
+        Error(message: SERVER_FAILURE_MESSAGE)
+      ],
     );
 
     blocTest<NumberTriviaBloc, NumberTriviaState>(

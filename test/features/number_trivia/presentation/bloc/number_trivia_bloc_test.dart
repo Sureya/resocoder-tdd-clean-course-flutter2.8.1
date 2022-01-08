@@ -1,4 +1,5 @@
 import 'package:bloc_course/core/errors/failure.dart';
+import 'package:bloc_course/core/usecases/usecase.dart';
 import 'package:bloc_course/core/util/input_conversion.dart';
 import 'package:bloc_course/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:bloc_course/features/number_trivia/domain/usecases/get_concrete_number_trivia.dart';
@@ -58,6 +59,16 @@ void main() {
           .thenAnswer((_) async => Left(ServerFailure()));
 
     }
+
+    void setupCacheFailureForConcreteNumber() {
+      when(() => mockInputConverter.stringToUnsignedInt(str: any(named: 'str')))
+          .thenReturn(Right(tNumberParsed));
+
+      when(() => mockConcreteNumberTrivia.call(params: any(named: 'params')))
+          .thenAnswer((_) async => Left(CacheFailure()));
+
+    }
+
     test(
         'should call InputConverter to validate and convert the string to an '
         'unsigned int', () async {
@@ -100,14 +111,14 @@ void main() {
 
     blocTest<NumberTriviaBloc, NumberTriviaState>(
       'should emit [CacheFailure] when the Server Exception is raised',
-      setUp: () => setupServerFailureForConcreteNumber(),
+      setUp: () => setupCacheFailureForConcreteNumber(),
       build: () => bloc,
       act: (bloc) =>
           bloc.add(GetTriviaForConcreteNumber(numberString: tNumberString)),
       expect: () =>
       <NumberTriviaState>[
         Loading(),
-        Error(message: SERVER_FAILURE_MESSAGE)
+        Error(message: CACHE_FAILURE_MESSAGE)
       ],
     );
 
@@ -122,6 +133,66 @@ void main() {
             Loading(),
             Loaded(trivia: tNumberTrivia)
           ],
+    );
+
+  });
+
+  group('GetTriviaForRandomNumber', () {
+    final tNumberTrivia = NumberTrivia(text: 'trivia test', number: 1);
+
+    void setupSuccessCallsForRandomNumber() {
+      when(() => mockRandomNumberTrivia())
+          .thenAnswer((_) async => Right(tNumberTrivia));
+    }
+
+    void setupServerFailureForRandomNumber() {
+      when(() => mockRandomNumberTrivia())
+          .thenAnswer((_) async => Left(ServerFailure()));
+    }
+
+    void setupCacheFailureForRandomNumber() {
+      when(() => mockRandomNumberTrivia())
+          .thenAnswer((_) async => Left(CacheFailure()));
+    }
+
+
+    blocTest<NumberTriviaBloc, NumberTriviaState>(
+      'should emit [ServerFailure] when the Server Exception is raised',
+      setUp: () => setupServerFailureForRandomNumber(),
+      build: () => bloc,
+      act: (bloc) =>
+          bloc.add(GetTriviaForRandomNumber()),
+      expect: () =>
+      <NumberTriviaState>[
+        Loading(),
+        Error(message: SERVER_FAILURE_MESSAGE)
+      ],
+    );
+
+    blocTest<NumberTriviaBloc, NumberTriviaState>(
+      'should emit [CacheFailure] when the Server Exception is raised',
+      setUp: () => setupCacheFailureForRandomNumber(),
+      build: () => bloc,
+      act: (bloc) =>
+          bloc.add(GetTriviaForRandomNumber()),
+      expect: () =>
+      <NumberTriviaState>[
+        Loading(),
+        Error(message: CACHE_FAILURE_MESSAGE)
+      ],
+    );
+
+    blocTest<NumberTriviaBloc, NumberTriviaState>(
+      'should get data from the concrete use case',
+      setUp: () => setupSuccessCallsForRandomNumber(),
+      build: () => bloc,
+      act: (bloc) =>
+          bloc.add(GetTriviaForRandomNumber()),
+      expect: () =>
+      <NumberTriviaState>[
+        Loading(),
+        Loaded(trivia: tNumberTrivia)
+      ],
     );
 
   });

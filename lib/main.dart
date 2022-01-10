@@ -8,7 +8,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
   runApp(
-      ProviderScope(child: MyApp())
+      ProviderScope(
+          child: MyApp()
+      )
   );
 }
 

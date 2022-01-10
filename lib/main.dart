@@ -1,6 +1,5 @@
 import 'package:bloc_course/injection_container.dart' as di;
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'features/number_trivia/presentation/pages/number_trivia_page.dart';
 
@@ -8,7 +7,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
   runApp(
-      ProviderScope(child: MyApp())
+      MyApp()
   );
 }
 

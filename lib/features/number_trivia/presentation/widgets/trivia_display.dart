@@ -1,14 +1,15 @@
 
 import 'package:bloc_course/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TriviaDisplay extends StatelessWidget {
+class TriviaDisplay extends ConsumerWidget {
   const TriviaDisplay({ required this.numberTrivia}) : super();
 
   final NumberTrivia numberTrivia ;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
         margin: EdgeInsets.all(5),
         height: MediaQuery.of(context).size.height/6,

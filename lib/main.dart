@@ -1,24 +1,28 @@
 import 'package:bloc_course/injection_container.dart' as di;
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'features/number_trivia/presentation/pages/number_trivia_page.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await di.init();
-  runApp(const MyApp());
+  runApp(
+      ProviderScope(child: MyApp())
+  );
 }
 
-
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text("Hello World!"),
-        ),
+      title: 'Number Trivia',
+      home: NumberTriviaPage(key: Key("trivia_page")),
+      theme: ThemeData(
+        primaryColor: Colors.green.shade800
       ),
     );
   }
 }
+
 

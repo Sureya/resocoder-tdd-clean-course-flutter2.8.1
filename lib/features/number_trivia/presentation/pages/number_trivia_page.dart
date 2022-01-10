@@ -1,63 +1,57 @@
-import 'package:bloc_course/features/number_trivia/presentation/bloc/number_trivia_bloc.dart';
+import 'package:bloc_course/features/number_trivia/presentation/logic/number_trivia_provider.dart';
 import 'package:bloc_course/features/number_trivia/presentation/widgets/loading_widget.dart';
 import 'package:bloc_course/features/number_trivia/presentation/widgets/message_display.dart';
 import 'package:bloc_course/features/number_trivia/presentation/widgets/trivia_controls.dart';
 import 'package:bloc_course/features/number_trivia/presentation/widgets/trivia_display.dart';
-import 'package:bloc_course/injection_container.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NumberTriviaPage extends StatelessWidget {
+class NumberTriviaPage extends ConsumerWidget {
   NumberTriviaPage({required Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<NumberTriviaBloc>(),
-      child: Scaffold(
-          appBar: AppBar(
-            title: Text('Number Trivia'),
-          ),
-          body: buildBody(context:context)
-      ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Number Trivia'),
+        ),
+        body: buildBody(
+            context:context,
+            ref: ref
+        )
     );
   }
 
-  Widget buildBody({required BuildContext context}){
+  Widget mapStateToWidget({
+    required BuildContext context,
+    required WidgetRef ref
+  }){
+    return Consumer(
+        builder: (context, watch, child) {
+          final state = ref.watch(numberTriviaProvider);
+          return state.when(
+            initial: () => MessageDisplay(message: 'Start searching dudes!'),
+            loading: () => LoadingWidget(),
+            data: (trivia) => TriviaDisplay(numberTrivia: trivia),
+            error: (error) => Text('Error Occured!'),
+          );
+        }
+    ) ;
+  }
+  Widget buildBody({
+    required BuildContext context,
+    required WidgetRef ref
+  }){
+
     return Center(
         child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
                 SizedBox(height: 20.0,),
-                BlocBuilder<NumberTriviaBloc, NumberTriviaState>(
-                    bloc: sl<NumberTriviaBloc>(),
-                    builder: (context, state) {
-                      print("********** ${state.runtimeType} 12**********");
-                      if (state is Empty) {
-                        return MessageDisplay(
-                          message: 'Start searching!',
-                        );
-                      } else if (state is Loading) {
-                        return LoadingWidget();
-                      } else if (state is Loaded) {
-                        return TriviaDisplay(numberTrivia: state.trivia);
-                      } else if (state is Error) {
-                        return MessageDisplay(
-                          message: state.message,
-                        );
-                      }
-                      else{
-                        return MessageDisplay(message:"Unknown error");
-                      }
-
-
-                    }
-                ),
+                mapStateToWidget(context:context, ref: ref),
                 SizedBox(height: 30.0,),
-                TriviaControls(
-                    key: Key("trivia_control")
-                )
+                TriviaControls(key: Key("trivia_control"))
               ],
             )
         )

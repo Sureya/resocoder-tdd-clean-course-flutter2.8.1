@@ -1,40 +1,37 @@
-import 'package:bloc_course/features/number_trivia/presentation/bloc/number_trivia_bloc.dart';
+import 'package:bloc_course/features/number_trivia/presentation/logic/number_trivia_provider.dart';
+import 'package:bloc_course/features/number_trivia/presentation/logic/number_trivia_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 
-class TriviaControls extends StatefulWidget {
+class TriviaControls extends ConsumerStatefulWidget {
   const TriviaControls({
     required Key key,
   }) : super(key: key);
 
   @override
-  State<TriviaControls> createState() => _TriviaControlsState();
+  ConsumerState<ConsumerStatefulWidget> createState() {
+    return _TriviaControlsState();
+  }
+
+
 }
 
-class _TriviaControlsState extends State<TriviaControls> {
+class _TriviaControlsState extends ConsumerState<TriviaControls> {
   String inputStr = "" ;
   final TextEditingController controller  = TextEditingController();
 
-  void dispatchConcrete() {
-    BlocProvider.of<NumberTriviaBloc>(context).add(
-        GetTriviaForConcreteNumber(numberString: inputStr.toString()
-        )
-    );
 
-
-  }
-  void dispatchRandom() {
-    BlocProvider.of<NumberTriviaBloc>(context).add(
-        GetTriviaForRandomNumber()
-    );
-
+  void getTrivia(){
 
   }
 
   @override
   Widget build(BuildContext mainContext) {
+    final state = ref.watch(numberTriviaProvider);
+
     return Column(
       children: [
         TextField(
@@ -47,9 +44,7 @@ class _TriviaControlsState extends State<TriviaControls> {
               border: OutlineInputBorder(),
               hintText: "Input a number"
           ),
-          onSubmitted: (_) {
-            dispatchConcrete();
-          },
+          onSubmitted: (_) => ref.read(numberTriviaProvider.notifier).fetchConcreteTriviaNumber(numberString: inputStr),
         ),
         SizedBox(height: 25),
         Row(
@@ -59,15 +54,17 @@ class _TriviaControlsState extends State<TriviaControls> {
                   child: Text("Search"),
                   onPressed: () {
                     controller.clear();
-                    dispatchConcrete() ;
+                    ref.read(numberTriviaProvider.notifier).fetchConcreteTriviaNumber(numberString: inputStr);
                   },
                 )
             ),
             SizedBox(width: 10),
             Expanded(
               child: ElevatedButton(
+                onPressed: () {
+                  ref.read(numberTriviaProvider.notifier).fetchRandomTriviaNumber();
+                },
                 child: Text("Get Random Trivia"),
-                onPressed: () => dispatchRandom(),
               ),
             ),
           ],

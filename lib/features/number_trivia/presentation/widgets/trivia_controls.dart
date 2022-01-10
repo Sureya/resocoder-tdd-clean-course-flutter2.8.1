@@ -18,9 +18,6 @@ class _TriviaControlsState extends State<TriviaControls> {
   final TextEditingController controller  = TextEditingController();
 
   void dispatchConcrete() {
-    print(BlocProvider.of<NumberTriviaBloc>(context).state);
-    print(BlocProvider.of<NumberTriviaBloc>(context).runtimeType);
-
     BlocProvider.of<NumberTriviaBloc>(context).add(
         GetTriviaForConcreteNumber(numberString: inputStr.toString()
         )

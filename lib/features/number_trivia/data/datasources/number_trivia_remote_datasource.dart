@@ -28,7 +28,8 @@ class NumberTriviaRemoteDataSourceImpl implements NumberTriviaRemoteDataSource {
   Future<NumberTriviaModel> _getNumberTriviaFromApi(String url) async {
     final response = await dioClient.get(url);
     if (response.statusCode == 200) {
-      return NumberTriviaModel.fromJson(json: jsonDecode(response.data));
+      print(response.data);
+      return NumberTriviaModel.fromJson(json: response.data);
     } else {
       throw ServerException();
     }

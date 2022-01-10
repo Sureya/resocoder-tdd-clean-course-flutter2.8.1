@@ -22,9 +22,10 @@ void main() {
   });
 
   void setUpMockHttpClientSuccess200() {
-    final responsePayload = fixture("trivia.json") ;
+    final responsePayload = jsonDecode(fixture("trivia.json")) ;
     final httpResponse = Response(
-        data: responsePayload, requestOptions: RequestOptions(path: '/any'),
+        data: responsePayload,
+        requestOptions: RequestOptions(path: '/any'),
         statusCode: 200
     );
 

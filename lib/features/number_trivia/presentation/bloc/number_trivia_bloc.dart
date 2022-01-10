@@ -45,7 +45,7 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
     }
   }
 
-  void fetchConcreteTriviaNumber({required event, required emit}){
+  Future<void> fetchConcreteTriviaNumber({required event, required emit}) async {
     final inputEither = inputConverter.stringToUnsignedInt(
         str: event.numberString
     );
@@ -67,14 +67,20 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
     );
   }
 
-  void fetchRandomTriviaNumber({required event, required emit}) async {
+  Future<void> fetchRandomTriviaNumber({required event, required emit}) async {
     emit(Loading());
     final triviaResult = await getRandomNumberTrivia.call();
     triviaResult.fold(
             (failure) {
-          emit(Error(message: _mapFailureToMessage(failure))) ;
-        },
-            (trivia) => emit(Loaded(trivia: trivia))
+              print("failed");
+              emit(
+                  Error(message: _mapFailureToMessage(failure))
+              ) ;
+          },
+          (trivia) {
+              print("passed");
+              emit(Loaded(trivia: trivia));
+          }
     );
   }
 }
